@@ -9,7 +9,9 @@ interface LayoutProps {
 function Layout({ children }: LayoutProps) {
   return (
     <>
-      <main>{children}</main>
+      <main className="h-screen w-screen flex items-center justify-center">
+        {children}
+      </main>
     </>
   );
 }
