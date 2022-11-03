@@ -27,6 +27,16 @@ function Results({ results, setResults }: any) {
 
   // Handle Restart
   const handleRestart = () => {
+    // Clear results
+    const baseQuestions = results.map((q: any) => {
+      q.rating = 0;
+      return q;
+    });
+
+    // Set results to cleared
+    setResults(baseQuestions);
+
+    // Go home
     router.push("/");
   };
 
@@ -35,6 +45,7 @@ function Results({ results, setResults }: any) {
   const ratings = results.map((question: any) => question.rating);
   const questions = results.map((question: any) => question.question);
 
+  // Set data for chart
   let data = {
     labels: questions,
     datasets: [
