@@ -6,7 +6,7 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 
 // Functions
 function QuestionPage({ id }: any) {
-  // UseEffect
+  // UseEffect for setting current question using context id
   useEffect(() => {
     setCurrentQuestion(
       results.find((question: any) => question.number === parseInt(id)) ||
@@ -20,6 +20,7 @@ function QuestionPage({ id }: any) {
   // State
   const [results, setResults] = useState(questions);
   const [currentQuestion, setCurrentQuestion] = useState(
+    // Find current question in results via context id or questions
     results.find((question: any) => question.number === parseInt(id)) ||
       questions[id - 1]
   );
@@ -42,8 +43,6 @@ function QuestionPage({ id }: any) {
   const handleNext = () => {
     if (currentQuestion.number < results.length) {
       handleSubmit();
-      console.log(currentQuestion.number);
-
       router.push(`/questions/${currentQuestion.number + 1}`);
     } else {
       handleFinish();
@@ -51,7 +50,7 @@ function QuestionPage({ id }: any) {
     }
   };
 
-  // Handle Submit
+  // Handle Submit save results by editing object in results array
   const handleSubmit = () => {
     const oldState = results;
     const newState = oldState.map((q: any) => {
@@ -63,22 +62,24 @@ function QuestionPage({ id }: any) {
     setResults(newState);
   };
 
-  // Handle Finish
+  // Handle Finish for ChartJS
   const handleFinish = () => {};
 
-  // Handle Score
+  // Handle Score on plus
   const handlePlus = () => {
     if (score < 5) {
       setScore(score + 1);
     }
   };
 
+  // Handle Score on minus
   const handleMinus = () => {
     if (score > 0) {
       setScore(score - 1);
     }
   };
 
+  // Set Score on Current Question Change
   useEffect(() => {
     setScore(currentQuestion.rating);
   }, [currentQuestion]);
