@@ -78,7 +78,7 @@ function Results({ results, setResults }: any) {
     <>
       <section>
         <h1 className="text-2xl font-bold mb-8">Results</h1>
-        <article className="w-[50vw]">
+        <article className="w-[90vw] md:w-[50vw] mb-8">
           <Bar data={data}></Bar>
         </article>
         <button
