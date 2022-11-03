@@ -2,20 +2,15 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
+import questions from "../public/questions.json";
 
 // Functions
 function App({ Component, pageProps }: AppProps) {
-  const [statistics, setStatistics] = useState([]);
-
   return (
     <>
       <Layout>
-        <Component
-          {...pageProps}
-          statistics={statistics}
-          setStatistics={setStatistics}
-        />
+        <Component {...pageProps} />
       </Layout>
     </>
   );

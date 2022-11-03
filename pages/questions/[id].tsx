@@ -1,25 +1,37 @@
 // Imports
 import questions from "../../public/questions.json";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
 // Functions
-function QuestionPage({ question, statistics, setStatistics }: any) {
+function QuestionPage({ id }: any) {
+  // UseEffect
+  useEffect(() => {
+    setCurrentQuestion(
+      results.find((question: any) => question.number === parseInt(id)) ||
+        questions[id - 1]
+    );
+  });
+
   // Router
   const router = useRouter();
 
-  // Set Statistics
-  setStatistics(questions);
-
   // State
-  const [score, setScore] = useState(question.rating);
+  const [results, setResults] = useState(questions);
+  const [currentQuestion, setCurrentQuestion] = useState(
+    results.find((question: any) => question.number === parseInt(id)) ||
+      questions[id - 1]
+  );
+  const [score, setScore] = useState(currentQuestion.rating);
+
+  console.log(currentQuestion);
 
   // Handle Prev
   const handlePrev = () => {
-    if (question.number > 1) {
+    if (currentQuestion.number > 1) {
       handleSubmit();
-      router.push(`/questions/${question.number - 1}`);
+      router.push(`/questions/${currentQuestion.number - 1}`);
     } else {
       handleSubmit();
       router.push("/");
@@ -28,10 +40,11 @@ function QuestionPage({ question, statistics, setStatistics }: any) {
 
   // Handle Next
   const handleNext = () => {
-    if (question.number < questions.length) {
+    if (currentQuestion.number < results.length) {
       handleSubmit();
+      console.log(currentQuestion.number);
 
-      router.push(`/questions/${question.number + 1}`);
+      router.push(`/questions/${currentQuestion.number + 1}`);
     } else {
       handleFinish();
       router.push("/results");
@@ -40,11 +53,14 @@ function QuestionPage({ question, statistics, setStatistics }: any) {
 
   // Handle Submit
   const handleSubmit = () => {
-    question.rating = score;
-    setStatistics(...statistics, question);
-    console.log(statistics);
-
-    setScore(0);
+    const oldState = results;
+    const newState = oldState.map((q: any) => {
+      if (q.number === currentQuestion.number) {
+        q.rating = score;
+      }
+      return q;
+    });
+    setResults(newState);
   };
 
   // Handle Finish
@@ -52,18 +68,26 @@ function QuestionPage({ question, statistics, setStatistics }: any) {
 
   // Handle Score
   const handlePlus = () => {
-    if (score < 5) setScore(score + 1);
+    if (score < 5) {
+      setScore(score + 1);
+    }
   };
 
   const handleMinus = () => {
-    if (score > 0) setScore(score - 1);
+    if (score > 0) {
+      setScore(score - 1);
+    }
   };
+
+  useEffect(() => {
+    setScore(currentQuestion.rating);
+  }, [currentQuestion]);
 
   return (
     <>
       <section>
         <h1 className="text-2xl font-bold mb-2">Question Page</h1>
-        <p className="mb-8">{question.question}</p>
+        <p className="mb-8">{currentQuestion.question}</p>
         <section className="mb-8">
           <p>Score</p>
           <div className="text-3xl font-bold mb-6">{score}</div>
@@ -101,12 +125,12 @@ export default QuestionPage;
 // getServerSideProps
 export async function getServerSideProps(context: any) {
   const contextid = context.params;
-  const questionid = contextid.id - 1;
+  const questionid = contextid.id;
   const question = questions[questionid];
 
   return {
     props: {
-      question,
+      id: questionid,
     },
   };
 }
