@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
 
 // Functions
-function QuestionPage({ id }: any) {
+function QuestionPage({ id, results, setResults }: any) {
   // UseEffect for setting current question using context id
   useEffect(() => {
     setCurrentQuestion(
@@ -18,7 +18,6 @@ function QuestionPage({ id }: any) {
   const router = useRouter();
 
   // State
-  const [results, setResults] = useState(questions);
   const [currentQuestion, setCurrentQuestion] = useState(
     // Find current question in results via context id or questions
     results.find((question: any) => question.number === parseInt(id)) ||
@@ -87,11 +86,13 @@ function QuestionPage({ id }: any) {
   return (
     <>
       <section>
-        <h1 className="text-2xl font-bold mb-2">Question Page</h1>
-        <p className="mb-8">{currentQuestion.question}</p>
+        <h1 className="text-2xl font-bold mb-8">
+          [{currentQuestion.number}]<span> - </span>
+          {currentQuestion.question}
+        </h1>
         <section className="mb-8">
-          <p>Score</p>
-          <div className="text-3xl font-bold mb-6">{score}</div>
+          <p className="mb-4 text-lg">Score</p>
+          <div className="text-6xl font-bold mb-6">{score}</div>
           <div className="flex gap-4 justify-center items-center">
             <button>
               <FaMinus onClick={handleMinus} />
